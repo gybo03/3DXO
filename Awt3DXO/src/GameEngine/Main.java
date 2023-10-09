@@ -1,10 +1,12 @@
 package GameEngine;
 
+import UI.UserInterface;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Cube game = new Cube(4, 2);
+
         /*
         //prvi
         game.addChip(0,0);
@@ -29,15 +31,7 @@ public class Main {
 
         System.out.println(game);
         */
-        Scanner scanner = new Scanner(System.in);
-        int x, y;
-        while (game.getWinner() == 0) {
-            x = scanner.nextInt();
-            y = scanner.nextInt();
-            game.addChip(x, y);
-            System.out.println(game);
-        }
-        System.out.println(game.getWinner());
+        UserInterface.run(300,2,4);
 
 
         //System.out.println(game.findWinner());

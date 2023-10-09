@@ -233,7 +233,6 @@ public class Cube {
         }
         //</editor-fold>
         return winner;
-
     }
 
     public void addChip(int posX, int posY) {
