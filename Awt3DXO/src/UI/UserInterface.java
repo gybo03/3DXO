@@ -21,20 +21,10 @@ public class UserInterface {
         jFrame.setSize(size,size);
 
 
-        JPanel jPanel=new JPanel(){
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-            }
-            private void drawBoard(JPanel jPanel, int numOfColumns, int size){
-                System.out.println(jPanel.getGraphics());
-                Graphics2D g2d=(Graphics2D) this.getGraphics();
-                int sizeOfOneLine=10;
-                int sizeOfOneSquare=(size-(numOfColumns*sizeOfOneLine))/4;
-                g2d.drawLine(sizeOfOneSquare,0,sizeOfOneSquare+sizeOfOneLine,size);
-            }
-        };
-        jPanel.setBackground(Color.BLACK);
-        //drawBoard(jPanel,numOfPlayers,size);
+
+        MyJPanel jPanel=new MyJPanel(numOfColumns,90,10);
+        jPanel.repaint();
+
         jFrame.add(jPanel);
         jFrame.setVisible(true);
 

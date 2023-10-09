@@ -31,7 +31,7 @@ public class Main {
 
         System.out.println(game);
         */
-        UserInterface.run(300,2,4);
+        UserInterface.run(390,2,4);
 
 
         //System.out.println(game.findWinner());
