@@ -12,23 +12,25 @@ public class UserInterface {
 
 
     //trololol
-    public static void run(int size,int numOfPlayers,int numOfColumns){
+    public static void run(int sizeOfSquare,int sizeOfLine,int numOfPlayers,int numOfColumns){
         JFrame jFrame=new JFrame("3DXO");
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setBackground(Color.BLACK);
         jFrame.setLocationRelativeTo(null);
-        jFrame.setResizable(false);
-        jFrame.setSize(size,size);
+        jFrame.setResizable(true);
+        //jFrame.setSize((sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1)+6,(sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1)+28);
 
 
 
-        MyJPanel jPanel=new MyJPanel(numOfColumns,90,10);
+        MyJPanel jPanel=new MyJPanel(numOfColumns,sizeOfSquare,sizeOfLine);
+        jPanel.setPreferredSize(new Dimension((sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1),(sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1)));
         jPanel.repaint();
 
         jFrame.add(jPanel);
+        jFrame.pack();
         jFrame.setVisible(true);
 
-        Cube game = new Cube(size, numOfPlayers);
+        Cube game = new Cube(numOfColumns, numOfPlayers);
         Scanner scanner = new Scanner(System.in);
         int x, y;
         while (game.getWinner() == 0) {
