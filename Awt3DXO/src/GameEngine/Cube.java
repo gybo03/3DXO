@@ -8,12 +8,16 @@ public class Cube {
     private int turn = 0;
     private int winner=0;
     private final int[][][] cube;
-    public final int[][] occupied;
+    private final int[][] occupied;
 
     public Cube(int dim, int cycle) {
         this.cycle = cycle;
         cube = new int[dim][dim][dim];
         occupied = new int[dim][dim];
+    }
+
+    public int[][] getOccupied() {
+        return occupied;
     }
 
     public void addChip(int posX, int posY) {
