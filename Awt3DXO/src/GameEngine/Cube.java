@@ -1,23 +1,28 @@
 package GameEngine;
 
 
+import java.util.Arrays;
 
 public class Cube {
 
-    private final int cycle;
+    private final int numOfPlayers;
     private int turn = 0;
     private int winner=0;
     private final int[][][] cube;
     private final int[][] occupied;
 
-    public Cube(int dim, int cycle) {
-        this.cycle = cycle;
+    public Cube(int dim, int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
         cube = new int[dim][dim][dim];
         occupied = new int[dim][dim];
     }
 
     public int[][] getOccupied() {
         return occupied;
+    }
+
+    public int getTurn() {
+        return turn;
     }
 
     public void addChip(int posX, int posY) {
@@ -31,8 +36,20 @@ public class Cube {
         if (occupied[posY][posX] != cube.length) {
             int posZ=occupied[posY][posX];
             occupied[posY][posX]++;
-            cube[posY][posX][posZ] = (turn++ % cycle) + 1;
+            cube[posY][posX][posZ] = (turn++ % numOfPlayers) + 1;
         }
+    }
+
+
+    public String occupiedOutput() {
+        StringBuilder stringBuilder=new StringBuilder();
+        for (int i = 0; i < occupied.length; i++) {
+            for (int j = 0; j < occupied.length; j++) {
+                stringBuilder.append(occupied[j][i]);
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     public int findWinner() {

@@ -17,7 +17,7 @@ public class UserInterface {
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setBackground(Color.BLACK);
         jFrame.setLocationRelativeTo(null);
-        jFrame.setResizable(true);
+        jFrame.setResizable(false);
 
         MyJPanel jPanel=new MyJPanel(numOfPlayers,numOfColumns,sizeOfSquare,sizeOfLine);
         jPanel.setPreferredSize(new Dimension((sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1),(sizeOfSquare) * numOfColumns + sizeOfLine * (numOfColumns - 1)));
