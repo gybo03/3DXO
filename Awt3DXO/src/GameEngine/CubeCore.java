@@ -1,25 +1,42 @@
 package GameEngine;
 
+import static GameEngine.Cube.numOfPlayers;
+
 public class CubeCore {
 
     private  int[][][] cube;
     private  int[][] occupied;
+    private int turn=0;
 
     public CubeCore(int numOfColumns) {
         cube = new int[numOfColumns][numOfColumns][numOfColumns];
         occupied = new int[numOfColumns][numOfColumns];
     }
 
-    public void playAMove(int i, int j, int player) {
-        gravityMechanic(i,j,player);
+    public CubeCore(int[][][] cube, int[][] occupied) {
+        this.cube = cube;
+        this.occupied = occupied;
     }
 
-    private void gravityMechanic(int posX, int posY, int player) {
-        if (occupied[posY][posX] < cube.length) {
-            int posZ = occupied[posY][posX];
-            occupied[posY][posX]++;
-            //player =(turn++ % numOfPlayers) + 1
-            cube[posY][posX][posZ] = player;
+    public void playAMove(int i, int j) {
+        turn++;
+        gravityMechanic(i,j);
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    private void gravityMechanic(int i, int j) {
+        if (occupied[i][j] < cube.length) {
+            int k = occupied[i][j];
+            occupied[i][j]++;
+            //System.out.println(k+" "+j+" "+i);
+            cube[j][i][k] = (turn % numOfPlayers)==0?numOfPlayers:(turn % numOfPlayers);
         }
     }
 

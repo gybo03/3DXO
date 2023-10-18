@@ -18,7 +18,8 @@ public class CubeTree {
         return root;
     }
 
-    public void fillBranches(CubeState state,CubeState parent, int depth) {
+    //this func fills the tree with all the possible moves to some depth
+    public void fillBranches(CubeState state, int depth) {
         if (depth==0){
             return;
         }
@@ -26,52 +27,59 @@ public class CubeTree {
             for (int i = 0; i < state.getCubeCore().getOccupied().length; i++) {
                 for (int j = 0; j < state.getCubeCore().getOccupied().length; j++) {
                     if (state.getCubeCore().getOccupied()[i][j] < state.getCubeCore().getOccupied().length) {
-                        CubeCore newCubeCore = new CubeCore(state.getCubeCore().getOccupied().length);
-                        newCubeCore.setCube(state.getCubeCore().getCube());
-                        newCubeCore.setOccupied(state.getCubeCore().getOccupied());
-                        newCubeCore.playAMove(i, j, (Cube.turn % Cube.numOfPlayers) + 1);
-                        CubeState newCubeState = new CubeState(newCubeCore,parent);
+                        //creates a new cubeCore with the same values as the current cubeCore
+                        CubeCore newCubeCore = new CubeCore(state.getCubeCore().getCube(), state.getCubeCore().getOccupied());
+                        //sets the turn of the new cubeCore
+                        newCubeCore.setTurn(state.getCubeCore().getTurn());
+                        //plays a move on the new cubeCore
+                        newCubeCore.playAMove(i, j);
+                        //creates a new cubeState with the new cubeCore
+                        CubeState newCubeState = new CubeState(newCubeCore,state);
+                        //sets the winner of the new cubeState
                         newCubeState.setWinner(newCubeCore.findWinner());
+                        //adds the new cubeState to the branches of the current cubeState
                         state.addState(newCubeState);
                     }
                 }
             }
         }
         for (CubeState cubeState : state.getBranches()) {
-            //System.out.println(depth);
-            int newDepth=depth-1;
-            fillBranches(cubeState,state, newDepth);
+            //if the current cubeState is not a winning state than it fills its branches
+            if(cubeState.getWinner()==0){
+                fillBranches(cubeState, depth-1);
+            }
         }
 
     }
+    //this func is bfs alg on a tree that return path from root to destination
     public static ArrayList<CubeState> findNthWinningPath(CubeState root,int player,int n) {
         if (root == null) {
             return null;
         }
         Queue<CubeState> queue=new LinkedList<>();
-        ArrayList<CubeState> winningPaths=new ArrayList<>();
+        ArrayList<CubeState> winningPath =new ArrayList<>();
         queue.add(root);
 
         while(n>0){
             if(queue.peek().getWinner()==player){
-                if (winningPaths.isEmpty()){
-                    winningPaths.add(queue.peek());
+                if (winningPath.isEmpty()){
+                    winningPath.add(queue.peek());
                 }else{
-                    winningPaths.set(0,queue.peek());
+                    winningPath.set(0,queue.peek());
                 }
                 n--;
             }
             queue.addAll(queue.peek().getBranches());
             queue.poll();
         }
-        CubeState temp=winningPaths.get(0);
-        while(!winningPaths.contains(root)){
-            winningPaths.add(temp.getParent());
+        CubeState temp= winningPath.get(0);
+        while(!winningPath.contains(root)){
+            winningPath.add(temp.getParent());
             temp=temp.getParent();
         }
-        return winningPaths;
+        return winningPath;
     }
-
+    //this func return coords of the move that the AI should play
     public int[] makeAMove(CubeState root,int player){
         ArrayList<CubeState> winningPaths=findNthWinningPath(root,player,1);
         return Cube.whatMoveWasPlayed(winningPaths.get(winningPaths.size()-1).getCubeCore(),winningPaths.get(winningPaths.size()).getCubeCore());
