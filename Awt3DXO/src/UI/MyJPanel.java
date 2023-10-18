@@ -1,6 +1,9 @@
 package UI;
 
 import GameEngine.Cube;
+import GameEngine.CubeCore;
+import Logic.CubeState;
+import Logic.CubeTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,14 +25,18 @@ public class MyJPanel extends JPanel implements MouseListener {
 
     private int lastMouseY;
     private int lastMouseX;
+    private CubeTree cubeTree;
 
     public MyJPanel(int numOfPlayers, int numOfColumns, int sizeOfSquare, int sizeOfline) {
-        cube = new Cube(numOfColumns, numOfPlayers);
+        cube = new Cube(numOfColumns);
+        Cube.numOfPlayers = numOfPlayers;
         this.numOfPlayers = numOfPlayers;
         this.numOfColumns = numOfColumns;
         this.sizeOfSquare = sizeOfSquare;
         this.sizeOfLine = sizeOfline;
         this.addMouseListener(this);
+        cubeTree = new CubeTree(new CubeState(cube, null));
+
     }
 
     public void addLine(int x1, int y1, int width, int height) {
@@ -79,37 +86,45 @@ public class MyJPanel extends JPanel implements MouseListener {
         whichSquareIsPressed(e.getX(), e.getY());
     }
 
+    private void drawAMove(int i, int j) {
+        int sizeOfPieceOfSquare = sizeOfSquare / numOfColumns;
+        int leftOver = sizeOfSquare - sizeOfPieceOfSquare * numOfColumns;
+        Graphics g = getGraphics();
+        //System.out.println(cube.getTurn()%numOfPlayers);
+        switch ((cube.getTurn() - 1) % numOfPlayers + 1) {
+            case 1:
+                g.setColor(Color.RED);
+                break;
+            case 2:
+                g.setColor(Color.BLUE);
+                break;
+            case 3:
+                g.setColor(Color.GREEN);
+                break;
+        }
+        //System.out.println(i + " " + j);
+        //System.out.println(i*100+" "+(numOfColumns-cube.getOccupied()[i][j])*sizeOfPieceOfSquare);
+        if (cube.getOccupied()[i][j] == 1) {
+            g.fillRect(i * 100, (numOfColumns - cube.getOccupied()[i][j]) * sizeOfPieceOfSquare + j * (sizeOfSquare + sizeOfLine), sizeOfSquare, sizeOfPieceOfSquare + leftOver);
+        } else {
+            g.fillRect(i * 100, (numOfColumns - cube.getOccupied()[i][j]) * sizeOfPieceOfSquare + j * (sizeOfSquare + sizeOfLine), sizeOfSquare, sizeOfPieceOfSquare);
+        }
+    }
+
     @Override
     public void mouseReleased(MouseEvent e) {
         whichSquareIsPressed(e.getX(), e.getY());
         //System.out.println(e.getX() + " " + e.getY());
-        if(cube.findWinner()==0){
+        if (cube.findWinner() == 0) {
             if (lastMouseX == mouseX && lastMouseY == mouseY && cube.getOccupied()[mouseX][mouseY] < numOfColumns) {
-                cube.addChip(mouseY, mouseX);
-                System.out.println(cube.occupiedOutput());
-                int sizeOfPieceOfSquare = sizeOfSquare / numOfColumns;
-                int leftOver = sizeOfSquare - sizeOfPieceOfSquare * numOfColumns;
-                Graphics g = getGraphics();
-                //System.out.println(cube.getTurn()%numOfPlayers);
-                switch ((cube.getTurn() - 1) % numOfPlayers) {
-                    case 0:
-                        g.setColor(Color.RED);
-                        break;
-                    case 1:
-                        g.setColor(Color.BLUE);
-                        break;
-                    case 2:
-                        g.setColor(Color.GREEN);
-                        break;
-                }
+                cube.makeAMove(mouseY, mouseX);
+                //System.out.println(cube.occupiedOutput());
+                drawAMove(mouseX, mouseY);
+                cubeTree.fillBranches(new CubeState(cube,cubeTree.getRoot()), cubeTree.getRoot(),6);
+                int[] move = cubeTree.makeAMove(cubeTree.getRoot(), (Cube.turn % numOfPlayers) + 1);
+                cube.makeAMove(move[0], move[1]);
+                drawAMove(move[0], move[1]);
 
-                //System.out.println(mouseX + " " + mouseY);
-                System.out.println(mouseX*100+" "+(numOfColumns-cube.getOccupied()[mouseX][mouseY])*sizeOfPieceOfSquare);
-                if (cube.getOccupied()[mouseX][mouseY] == 1) {
-                    g.fillRect(mouseX * 100, (numOfColumns - cube.getOccupied()[mouseX][mouseY]) * sizeOfPieceOfSquare+mouseY*(sizeOfSquare + sizeOfLine), sizeOfSquare, sizeOfPieceOfSquare + leftOver);
-                } else {
-                    g.fillRect(mouseX * 100, (numOfColumns - cube.getOccupied()[mouseX][mouseY]) * sizeOfPieceOfSquare+mouseY*(sizeOfSquare + sizeOfLine), sizeOfSquare, sizeOfPieceOfSquare);
-                }
                 //g2d.setColor(Color.RED);
                 //System.out.println(g2d);
 
@@ -117,7 +132,7 @@ public class MyJPanel extends JPanel implements MouseListener {
                 //System.out.println(mouseY*100);
                 //addLine(mouseY*100,(numOfColumns-cube.getOccupied()[mouseX][mouseY])*sizeOfPieceOfSquare,sizeOfSquare,sizeOfPieceOfSquare);
             }
-        }else{
+        } else {
             System.out.println(cube.getWinner());
         }
 

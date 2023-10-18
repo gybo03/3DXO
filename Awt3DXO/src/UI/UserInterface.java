@@ -10,8 +10,6 @@ import java.util.Scanner;
 
 public class UserInterface {
 
-
-    //trololol
     public static void run(int sizeOfSquare,int sizeOfLine,int numOfPlayers,int numOfColumns){
         JFrame jFrame=new JFrame("3DXO");
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
