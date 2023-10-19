@@ -125,12 +125,12 @@ public class MyJPanel extends JPanel implements MouseListener {
             //find what is the optimal move
             int[] move = cubeTree.makeAMove(cubeTree.getRoot(), (cubeTree.getRoot().getCubeCore().getTurn() % numOfPlayers) + 1);
             //play optimal move for ai
-            //cube.makeAMove(move[0], move[1]);
+            cube.makeAMove(move[1], move[0]);
             //draw ais move
             drawAMove(move[0], move[1]);
             //check if winner is found
             if (cube.findWinner() != 0) {
-                //System.out.println(cube.getWinner());
+                System.out.println(cube.getWinner());
             }
         }
 
