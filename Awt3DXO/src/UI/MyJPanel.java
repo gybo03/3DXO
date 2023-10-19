@@ -118,16 +118,16 @@ public class MyJPanel extends JPanel implements MouseListener {
             //draw players move
             drawAMove(mouseY, mouseX);
 
-            System.out.println(cube);
+            //System.out.println(cube);
 
             //make a tree of possible plays for ai
-            /*cubeTree.fillBranches(new CubeState(cube, cubeTree.getRoot()), numOfColumns+1);
+            cubeTree.fillBranches(cubeTree.getRoot(),new CubeState(cube, cubeTree.getRoot()), numOfColumns+1);
             //find what is the optimal move
             int[] move = cubeTree.makeAMove(cubeTree.getRoot(), (cubeTree.getRoot().getCubeCore().getTurn() % numOfPlayers) + 1);
             //play optimal move for ai
-            cube.makeAMove(move[0], move[1]);
+            //cube.makeAMove(move[0], move[1]);
             //draw ais move
-            drawAMove(move[0], move[1]);*/
+            drawAMove(move[0], move[1]);
             //check if winner is found
             if (cube.findWinner() != 0) {
                 //System.out.println(cube.getWinner());

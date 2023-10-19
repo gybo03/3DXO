@@ -36,23 +36,5 @@ public class Cube extends CubeCore {
         return winner;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < getCube().length; i++) {
-            for (int j = 0; j < getCube()[0].length; j++) {
-                for (int k = 0; k < getCube()[0][0].length; k++) {
-                    if (getCube()[k][j][i] == 0) {
-                        sb.append(" 0 ");
-                    } else {
-                        sb.append(" ").append(getCube()[k][j][i]).append(" ");
-                    }
 
-                }
-                sb.append("\n");
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
 }

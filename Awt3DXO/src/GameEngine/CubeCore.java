@@ -1,5 +1,7 @@
 package GameEngine;
 
+import Logic.CubeState;
+
 import static GameEngine.Cube.numOfPlayers;
 
 public class CubeCore {
@@ -12,10 +14,16 @@ public class CubeCore {
         cube = new int[numOfColumns][numOfColumns][numOfColumns];
         occupied = new int[numOfColumns][numOfColumns];
     }
+    public CubeCore(CubeState cubeState){
+        this.cube=deepCopyCube(cubeState.getCubeCore().getCube());
+        this.occupied=deepCopyOccupied(cubeState.getCubeCore().getOccupied());
+        this.turn=cubeState.getCubeCore().getTurn();
+    }
 
-    public CubeCore(int[][][] cube, int[][] occupied) {
-        this.cube = cube;
-        this.occupied = occupied;
+    public CubeCore(int[][][] cube, int[][] occupied,int turn) {
+        this.cube=deepCopyCube(cube);
+        this.occupied=deepCopyOccupied(occupied);
+        this.turn=turn;
     }
 
     public void playAMove(int i, int j) {
@@ -29,6 +37,26 @@ public class CubeCore {
 
     public int getTurn() {
         return turn;
+    }
+    private static int[][] deepCopyOccupied(int[][] occupied) {
+        int[][] newOccupied = new int[occupied.length][occupied.length];
+        for (int i = 0; i < occupied.length; i++) {
+            for (int j = 0; j < occupied.length; j++) {
+                newOccupied[i][j] = occupied[i][j];
+            }
+        }
+        return newOccupied;
+    }
+    private static int[][][] deepCopyCube(int[][][] cube) {
+        int[][][] newCube = new int[cube.length][cube.length][cube.length];
+        for (int i = 0; i < cube.length; i++) {
+            for (int j = 0; j < cube.length; j++) {
+                for (int k = 0; k < cube.length; k++) {
+                    newCube[i][j][k] = cube[i][j][k];
+                }
+            }
+        }
+        return newCube;
     }
 
     private void gravityMechanic(int i, int j) {
@@ -280,5 +308,24 @@ public class CubeCore {
 
     public int[][] getOccupied() {
         return occupied;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < getCube().length; i++) {
+            for (int j = 0; j < getCube()[0].length; j++) {
+                for (int k = 0; k < getCube()[0][0].length; k++) {
+                    if (getCube()[k][j][i] == 0) {
+                        sb.append(" 0 ");
+                    } else {
+                        sb.append(" ").append(getCube()[k][j][i]).append(" ");
+                    }
+
+                }
+                sb.append("\n");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

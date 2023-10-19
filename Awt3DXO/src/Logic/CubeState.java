@@ -1,6 +1,8 @@
 package Logic;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 import GameEngine.Cube;
 import GameEngine.CubeCore;
 
@@ -25,6 +27,19 @@ public class CubeState {
 
     public CubeState getParent() {
         return parent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CubeState cubeState = (CubeState) o;
+        return winner == cubeState.winner &&  Objects.equals(cubeCore, cubeState.cubeCore) && Objects.equals(branches, cubeState.branches);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parent, cubeCore, branches, winner);
     }
 
     public void setWinner(int winner) {

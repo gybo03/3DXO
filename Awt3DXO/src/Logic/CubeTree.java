@@ -19,7 +19,7 @@ public class CubeTree {
     }
 
     //this func fills the tree with all the possible moves to some depth
-    public void fillBranches(CubeState state, int depth) {
+    public void fillBranches(CubeState root,CubeState state, int depth) {
         if (depth==0){
             return;
         }
@@ -28,7 +28,7 @@ public class CubeTree {
                 for (int j = 0; j < state.getCubeCore().getOccupied().length; j++) {
                     if (state.getCubeCore().getOccupied()[i][j] < state.getCubeCore().getOccupied().length) {
                         //creates a new cubeCore with the same values as the current cubeCore
-                        CubeCore newCubeCore = new CubeCore(state.getCubeCore().getCube(), state.getCubeCore().getOccupied());
+                        CubeCore newCubeCore = new CubeCore(state);
                         //sets the turn of the new cubeCore
                         newCubeCore.setTurn(state.getCubeCore().getTurn());
                         //plays a move on the new cubeCore
@@ -38,6 +38,9 @@ public class CubeTree {
                         //sets the winner of the new cubeState
                         newCubeState.setWinner(newCubeCore.findWinner());
                         //adds the new cubeState to the branches of the current cubeState
+                        if(state.equals(root)){
+                            root.addState(newCubeState);
+                        }
                         state.addState(newCubeState);
                     }
                 }
@@ -46,7 +49,7 @@ public class CubeTree {
         for (CubeState cubeState : state.getBranches()) {
             //if the current cubeState is not a winning state than it fills its branches
             if(cubeState.getWinner()==0){
-                fillBranches(cubeState, depth-1);
+                fillBranches(root,cubeState, depth-1);
             }
         }
 
@@ -82,7 +85,7 @@ public class CubeTree {
     //this func return coords of the move that the AI should play
     public int[] makeAMove(CubeState root,int player){
         ArrayList<CubeState> winningPaths=findNthWinningPath(root,player,1);
-        return Cube.whatMoveWasPlayed(winningPaths.get(winningPaths.size()-1).getCubeCore(),winningPaths.get(winningPaths.size()).getCubeCore());
+        return Cube.whatMoveWasPlayed(winningPaths.get(winningPaths.size()-2).getCubeCore(),winningPaths.get(winningPaths.size()-1).getCubeCore());
     }
 
     public void setRoot(CubeState root) {
