@@ -20,8 +20,6 @@ public class AppModel extends Sender {
     }
 
     private void initialize() {
-        BoardFrame.getInstance().setVisible(true);
-        WinnerFrame.getInstance().setVisible(false);
         currentPlayer = new Player(1, false, null, Color.RED);
         Player player2 = new Player(2, true, currentPlayer, Color.BLUE);
         currentPlayer.setNextPlayer(player2);
@@ -48,13 +46,13 @@ public class AppModel extends Sender {
             Player temp = currentPlayer;
 
             //change depth later to get value from a MenuFrame
-            cubeTree.fillBranches(cubeTree.getRoot(), cubeTree.getRoot(), 5);
+            cubeTree.fillBranches(cubeTree.getRoot(), cubeTree.getRoot(), 5,currentPlayer);
 
             //reverts to original current player after generating the tree
             currentPlayer = temp;
 
             //plays the move that the AI chose
-            cubeTree.getRoot().getCubeCore().playAMove(cubeTree.makeAMove(cubeTree.getRoot(), currentPlayer.getId())[0], cubeTree.makeAMove(cubeTree.getRoot(), currentPlayer.getId())[1]);
+            cubeTree.getRoot().getCubeCore().playAMove(cubeTree.makeAMove(cubeTree.getRoot(), currentPlayer.getId())[0], cubeTree.makeAMove(cubeTree.getRoot(), currentPlayer.getId())[1],currentPlayer.getId());
 
             //connects the next move to the last when AIs move
             cubeTree.getRoot().setParent(temp1);
@@ -63,7 +61,7 @@ public class AppModel extends Sender {
             cubeTree.eraseBranches(cubeTree.getRoot());
 
             //plays the move that the player chose
-            cubeTree.getRoot().getCubeCore().playAMove(i, j);
+            cubeTree.getRoot().getCubeCore().playAMove(i, j,currentPlayer.getId());
 
             //maybe player won check here
             cubeTree.getRoot().setWinner(cubeTree.getRoot().getCubeCore().findWinner());
@@ -81,10 +79,6 @@ public class AppModel extends Sender {
             nextPlayer();
         }
     }
-
-
-
-
     public CubeState getRoot() {
         return cubeTree.getRoot();
     }

@@ -15,6 +15,17 @@ public class Player {
         this.color = color;
     }
 
+    public int numOfPlayers(){
+        Player temp=this;
+        int i=1;
+        temp=this.getNextPlayer();
+        while(!temp.equals(this)){
+            i++;
+            temp=temp.getNextPlayer();
+        }
+        return i;
+    }
+
     public Color getColor() {
         return color;
     }

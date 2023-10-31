@@ -18,15 +18,15 @@ public class CubeCore {
         this.cube = deepCopyCube(cubeState.getCubeCore().getCube());
         this.occupied = deepCopyOccupied(cubeState.getCubeCore().getOccupied());
     }
-    public void playAMove(int i, int j) {
-        gravityMechanic(i, j);
+    public void playAMove(int i, int j,int player) {
+        gravityMechanic(i, j,player);
     }
-    private void gravityMechanic(int i, int j) {
+    private void gravityMechanic(int i, int j,int player) {
         if (occupied[i][j] < cube.length) {
             int k = occupied[i][j];
             occupied[i][j]++;
             //System.out.println(k+" "+j+" "+i);
-            cube[j][i][k] = AppModel.getInstance().getCurrentPlayer().getId();
+            cube[j][i][k] = player;
         }
     }
 

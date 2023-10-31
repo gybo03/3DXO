@@ -25,22 +25,11 @@ public class Controller implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        /*JPanel clickedPanel = (JPanel) BoardFrame.getInstance().getMainPanel().getComponentAt(e.getPoint());
-         for (int i = 0; i < numOfColumns; i++) {
-                for (int j = 0; j < numOfColumns; j++) {
-                    System.out.print(AppModel.getInstance().getCubeTree().getRoot().getCubeCore().getOccupied()[j][i]);
-                }
-                System.out.println();
-            }
-            System.out.println();
-            clickedPanel.getComponents()[numOfColumns-AppModel.getInstance().getCubeTree().getRoot().getCubeCore().getOccupied()[iCoord(e.getX())][iCoord(e.getY())]].setBackground(AppModel.getInstance().getCurrentPlayer().getColor());*/
-
         AppModel.getInstance().playAMove(iCoord(e.getX()), iCoord(e.getY()));
         while (AppModel.getInstance().getCurrentPlayer().isItAi()) {
             //if its an Ai then it does not need i or j
             AppModel.getInstance().playAMove(0, 0);
         }
-
     }
 
     @Override

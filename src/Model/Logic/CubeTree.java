@@ -25,8 +25,12 @@ public class CubeTree {
         root.setBranches(new ArrayList<>());
     }
 
+    private void calculateNextPlayer(int depth) {
+
+    }
+
     //this func fills the tree with all the possible moves to some depth
-    public void fillBranches(CubeState root, CubeState state, int depth) {
+    public void fillBranches(CubeState root, CubeState state, int depth, Player currentPlayer) {
         if (depth == 0) {
             return;
         }
@@ -36,7 +40,7 @@ public class CubeTree {
                     //creates a new cubeCore with the same values as the current cubeCore
                     CubeCore newCubeCore = new CubeCore(state);
                     //plays a move on the new cubeCore
-                    newCubeCore.playAMove(i, j);
+                    newCubeCore.playAMove(i, j, currentPlayer.getId());
                     //creates a new cubeState with the new cubeCore
                     CubeState newCubeState = new CubeState(newCubeCore, state);
                     //sets the winner of the new cubeState
@@ -51,11 +55,11 @@ public class CubeTree {
                 }
             }
         }
+        currentPlayer = currentPlayer.getNextPlayer();
         for (CubeState cubeState : state.getBranches()) {
             //if the current cubeState is not a winning state than it fills its branches
             if (cubeState.getWinner() == 0) {
-                AppModel.getInstance().nextPlayer();
-                fillBranches(root, cubeState, depth - 1);
+                fillBranches(root, cubeState, depth - 1, currentPlayer);
             }
         }
 
@@ -103,29 +107,29 @@ public class CubeTree {
         ArrayList<CubeState> winningPaths = findNthWinningPath(root, player, 1);
         ArrayList<CubeState> losingPaths = findLosingPath(root, player);
         //see if ai will lose before it can win
-        if (losingPaths.size()>winningPaths.size()) {
-            return CubeCore.whatMoveWasPlayed(winningPaths.get(winningPaths.size() - 2).getCubeCore(), winningPaths.get(winningPaths.size() - 1).getCubeCore());
+        if (losingPaths.size() > winningPaths.size()) {
+            return CubeCore.whatMoveWasPlayed(winningPaths.get(winningPaths.size() - 2).getCubeCore(), winningPaths.get(winningPaths.size() - 3).getCubeCore());
         } else {
-            return CubeCore.whatMoveWasPlayed(losingPaths.get(losingPaths.size()-2).getCubeCore(), losingPaths.get(losingPaths.size()-1).getCubeCore());
+            return CubeCore.whatMoveWasPlayed(losingPaths.get(losingPaths.size() - 2).getCubeCore(), losingPaths.get(losingPaths.size() - 3).getCubeCore());
         }
 
     }
 
     private ArrayList<CubeState> findLosingPath(CubeState root, int player) {
-        ArrayList<CubeState> path=new ArrayList<>();
-        int closestLoss=5;
+        ArrayList<CubeState> path = new ArrayList<>();
+        int closestLoss = 6;
         path.add(root);
-        Player player1=AppModel.getInstance().getCurrentPlayer().findPlayerWithId(player);
-        Player temp=player1.getNextPlayer();
-        while(temp.getId()!=player1.getId()){
-            if(findNthWinningPath(root,temp.getId(),1).size()<closestLoss){
-                closestLoss=findNthWinningPath(root,temp.getId(),1).size();
-                if(!path.isEmpty()){
+        Player player1 = AppModel.getInstance().getCurrentPlayer().findPlayerWithId(player);
+        Player temp = player1.getNextPlayer();
+        while (temp.getId() != player1.getId()) {
+            if (findNthWinningPath(root, temp.getId(), 1).size() < closestLoss) {
+                closestLoss = findNthWinningPath(root, temp.getId(), 1).size();
+                if (!path.isEmpty()) {
                     path.clear();
                 }
-                path.addAll(findNthWinningPath(root,temp.getId(),1));
+                path.addAll(findNthWinningPath(root, temp.getId(), 1));
             }
-            temp=temp.getNextPlayer();
+            temp = temp.getNextPlayer();
         }
         return path;
     }
