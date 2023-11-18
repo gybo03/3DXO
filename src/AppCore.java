@@ -9,5 +9,11 @@ public class AppCore {
         AppModel appModel = AppModel.getInstance();
         BoardFrame.getInstance().setVisible(true);
         WinnerFrame.getInstance().setVisible(false);
+        while(appModel.getCurrentPlayer().isItAi()){
+            if (appModel.getCurrentPlayer().isItAi()) {
+                appModel.playAMove(0, 0);
+            }
+        }
+
     }
 }

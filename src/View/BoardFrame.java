@@ -15,7 +15,7 @@ public class BoardFrame extends JFrame implements Recipient {
 
     private JPanel[][] panelMatrix;
 
-    private int numOfColumns = 3;
+    private int numOfColumns = 4;
 
     private BoardFrame() {
 
@@ -29,7 +29,6 @@ public class BoardFrame extends JFrame implements Recipient {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         //change later to get value from a MenuFrame
-        int numOfColumns = 3;
         mainPanel = new JPanel();
         mainPanel.setPreferredSize(new Dimension(500, 500));
         mainPanel.setBackground(Color.GRAY);
@@ -84,7 +83,8 @@ public class BoardFrame extends JFrame implements Recipient {
             //if the root and his parent are different than paint that component
             for (int i = 0; i < root.getCubeCore().getCube().length; i++) {
                 for (int j = 0; j < root.getCubeCore().getCube().length; j++) {
-                    if (root.getCubeCore().getOccupied()[i][j] != root.getParent().getCubeCore().getOccupied()[i][j] && root.getCubeCore().getOccupied()[i][j] != numOfColumns - root.getCubeCore().getOccupied()[i][j]) {
+                    //if (root.getCubeCore().getOccupied()[i][j] != root.getParent().getCubeCore().getOccupied()[i][j] && root.getCubeCore().getOccupied()[i][j] != numOfColumns - root.getCubeCore().getOccupied()[i][j]) {
+                    if (root.getCubeCore().getOccupied()[i][j] != root.getParent().getCubeCore().getOccupied()[i][j]) {
                         panelMatrix[j][i].getComponents()[numOfColumns - root.getCubeCore().getOccupied()[i][j]].setBackground(AppModel.getInstance().getCurrentPlayer().getColor());
                     }
                 }

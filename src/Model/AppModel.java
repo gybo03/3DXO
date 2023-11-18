@@ -22,12 +22,11 @@ public class AppModel extends Sender {
     private void initialize() {
         currentPlayer = new Player(1, false, null, Color.RED);
         Player player2 = new Player(2, true, currentPlayer, Color.BLUE);
+        //Player player3=new Player(3,true,currentPlayer,Color.GREEN);
         currentPlayer.setNextPlayer(player2);
+        //player2.setNextPlayer(player3);
         //later change numOfColumns to get value from a MenuFrame
-        cubeTree = new CubeTree(new CubeState(new CubeCore(3), null));
-        if (currentPlayer.isItAi()) {
-            playAMove(0, 0);
-        }
+        cubeTree = new CubeTree(new CubeState(new CubeCore(4), null));
     }
 
     public void nextPlayer() {
@@ -45,7 +44,10 @@ public class AppModel extends Sender {
             //saves the current player because the fillBranches changes the current player
             Player temp = currentPlayer;
 
+            cubeTree.eraseBranches(cubeTree.getRoot());
+
             //change depth later to get value from a MenuFrame
+
             cubeTree.fillBranches(cubeTree.getRoot(), cubeTree.getRoot(), 5,currentPlayer);
 
             //reverts to original current player after generating the tree

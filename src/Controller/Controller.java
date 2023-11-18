@@ -9,13 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class Controller implements MouseListener {
-    int numOfColumns = 3;
+    int numOfColumns = 4;
 
     public Controller() {
     }
 
     private int iCoord(int x) {
-        for (int i = 0; i < BoardFrame.getInstance().getMainPanel().getSize().height; i += BoardFrame.getInstance().getMainPanel().getSize().height / numOfColumns) {
+        for (int i = 0; i <= BoardFrame.getInstance().getMainPanel().getSize().height; i += BoardFrame.getInstance().getMainPanel().getSize().height / numOfColumns) {
             if (x < i) {
                 return (i - BoardFrame.getInstance().getMainPanel().getSize().height / numOfColumns) / (BoardFrame.getInstance().getMainPanel().getSize().height / numOfColumns);
             }

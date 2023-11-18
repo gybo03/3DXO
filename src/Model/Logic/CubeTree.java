@@ -28,7 +28,8 @@ public class CubeTree {
     private void calculateNextPlayer(int depth) {
 
     }
-
+    public int playersWin=0;
+    public int numOfNodes=0;
     //this func fills the tree with all the possible moves to some depth
     public void fillBranches(CubeState root, CubeState state, int depth, Player currentPlayer) {
         if (depth == 0) {
@@ -37,6 +38,7 @@ public class CubeTree {
         for (int i = 0; i < state.getCubeCore().getOccupied().length; i++) {
             for (int j = 0; j < state.getCubeCore().getOccupied().length; j++) {
                 if (state.getCubeCore().getOccupied()[i][j] < state.getCubeCore().getOccupied().length) {
+                    numOfNodes++;
                     //creates a new cubeCore with the same values as the current cubeCore
                     CubeCore newCubeCore = new CubeCore(state);
                     //plays a move on the new cubeCore
@@ -45,6 +47,9 @@ public class CubeTree {
                     CubeState newCubeState = new CubeState(newCubeCore, state);
                     //sets the winner of the new cubeState
                     newCubeState.setWinner(newCubeCore.findWinner());
+                    if(newCubeState.getWinner()==1){
+                        playersWin++;
+                    }
                     //adds the new cubeState to the branches of the current cubeState
                     if (state.equals(root)) {
                         root.addState(newCubeState);
@@ -55,6 +60,7 @@ public class CubeTree {
                 }
             }
         }
+        System.out.println(depth);
         currentPlayer = currentPlayer.getNextPlayer();
         for (CubeState cubeState : state.getBranches()) {
             //if the current cubeState is not a winning state than it fills its branches
@@ -104,11 +110,11 @@ public class CubeTree {
 
     //this func return coords of the move that the AI should play
     public int[] makeAMove(CubeState root, int player) {
-        ArrayList<CubeState> winningPaths = findNthWinningPath(root, player, 1);
+        ArrayList<CubeState> winningPath = findNthWinningPath(root, player, 1);
         ArrayList<CubeState> losingPaths = findLosingPath(root, player);
         //see if ai will lose before it can win
-        if (losingPaths.size() > winningPaths.size()) {
-            return CubeCore.whatMoveWasPlayed(winningPaths.get(winningPaths.size() - 2).getCubeCore(), winningPaths.get(winningPaths.size() - 3).getCubeCore());
+        if (losingPaths.size() > winningPath.size()) {
+            return CubeCore.whatMoveWasPlayed(winningPath.get(winningPath.size() - 2).getCubeCore(), winningPath.get(winningPath.size() - 1).getCubeCore());
         } else {
             return CubeCore.whatMoveWasPlayed(losingPaths.get(losingPaths.size() - 2).getCubeCore(), losingPaths.get(losingPaths.size() - 3).getCubeCore());
         }
@@ -117,7 +123,7 @@ public class CubeTree {
 
     private ArrayList<CubeState> findLosingPath(CubeState root, int player) {
         ArrayList<CubeState> path = new ArrayList<>();
-        int closestLoss = 6;
+        int closestLoss = Integer.MAX_VALUE;
         path.add(root);
         Player player1 = AppModel.getInstance().getCurrentPlayer().findPlayerWithId(player);
         Player temp = player1.getNextPlayer();
