@@ -48,7 +48,7 @@ public class AppModel extends Sender {
 
             //change depth later to get value from a MenuFrame
 
-            cubeTree.fillBranches(cubeTree.getRoot(), cubeTree.getRoot(), 5,currentPlayer);
+            cubeTree.fillBranches(cubeTree.getRoot(), cubeTree.getRoot(), 4,currentPlayer);
 
             //reverts to original current player after generating the tree
             currentPlayer = temp;
@@ -66,7 +66,7 @@ public class AppModel extends Sender {
             cubeTree.getRoot().getCubeCore().playAMove(i, j,currentPlayer.getId());
 
             //maybe player won check here
-            cubeTree.getRoot().setWinner(cubeTree.getRoot().getCubeCore().findWinner());
+            cubeTree.getRoot().setWinner(cubeTree.getRoot().getCubeCore().findWinner(1));
 
             //connects the next move to the last when players move
             cubeTree.getRoot().setParent(temp1);
